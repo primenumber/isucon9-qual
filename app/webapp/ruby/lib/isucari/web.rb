@@ -358,8 +358,29 @@ module Isucari
         end
       end
 
+      seller_ids = items.map do |item|
+        item['seller_id']
+      end
+      sellers = get_users_simple_by_ids(seller_ids)
+
+      tes = {}
+      transaction_evidences = db.xquery('SELECT * FROM `transaction_evidences` WHERE `item_id` IN (?)', items.map {|item| item['id'].to_i})
+      tids = []
+      transaction_evidences.each do |te|
+        tes[te['item_id']] = te
+        unless te['id'].nil?
+          tids << te['id']
+        end
+      end
+
+      sps = {}
+      shippings = db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` IN (?)', tids.map(&:to_i))
+      shippings.each do |sp|
+        sps[sp['transaction_evidence_id']] = sp
+      end
+
       item_details = items.map do |item|
-        seller = get_user_simple_by_id(item['seller_id'])
+        seller = sellers[item['seller_id']]
         if seller.nil?
           db.query('ROLLBACK')
           halt_with_error 404, 'seller not found'
@@ -401,9 +422,9 @@ module Isucari
           item_detail['buyer'] = buyer
         end
 
-        transaction_evidence = db.xquery('SELECT * FROM `transaction_evidences` WHERE `item_id` = ?', item['id']).first
+        transaction_evidence = tes[item['id']] #db.xquery('SELECT * FROM `transaction_evidences` WHERE `item_id` = ?', item['id']).first
         unless transaction_evidence.nil?
-          shipping = db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` = ?', transaction_evidence['id']).first
+          shipping = sps[transaction_evidence['id']] # db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` = ?', transaction_evidence['id']).first
           if shipping.nil?
             db.query('ROLLBACK')
             halt_with_error 404, 'shipping not found'
