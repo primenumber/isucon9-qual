@@ -400,8 +400,6 @@ module Isucari
         }
       end
 
-      $logger.debug items.count
-
       item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = users[item['seller_id']]
         if seller.nil?
