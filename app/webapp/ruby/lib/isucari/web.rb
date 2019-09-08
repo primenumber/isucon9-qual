@@ -377,7 +377,11 @@ module Isucari
       end
 
       sps = {}
-      shippings = db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` IN (?)', tids.map(&:to_i))
+      shippings = if tids.count > 0
+        db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` IN (?)', tids.map(&:to_i))
+      else
+        []
+      end
       shippings.each do |sp|
         sps[sp['transaction_evidence_id']] = {
           'reserve_id' => sp['reserve_id']
