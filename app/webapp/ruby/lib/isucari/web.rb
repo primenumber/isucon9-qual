@@ -6,9 +6,9 @@ require 'mysql2-cs-bind'
 require 'bcrypt'
 require 'isucari/api'
 require 'parallel'
-#require 'logger'
+require 'logger'
 
-#$logger = Logger.new('sinatra.log')
+$logger = Logger.new('sinatra.log')
 
 module Isucari
   class Web < Sinatra::Base
@@ -392,9 +392,9 @@ module Isucari
         }
       end
 
-      # $logger.debug items.map{|item| item['id']}.to_s
-      # $logger.debug tes.to_s
-      # $logger.debug sps.to_s
+      $logger.debug items.map{|item| item['id']}.to_s
+      $logger.debug tes.to_s
+      $logger.debug sps.to_s
 
       item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = sellers[item['seller_id']]
@@ -447,7 +447,7 @@ module Isucari
             halt_with_error 404, 'shipping not found'
           end
 
-          # $logger.debug shipping.to_s
+          $logger.debug shipping.to_s
 
           ssr = begin
             api_client.shipment_status(get_shipment_service_url, 'reserve_id' => shipping['reserve_id'])
