@@ -136,6 +136,7 @@ module Isucari
         }
       end
       def get_users_simple_by_ids(user_ids)
+        return {} if user_ids.count == 0
         users = db.xquery('SELECT * FROM `users` WHERE `id` IN (?)', user_ids.map(&:to_i))
 
         us = {}
