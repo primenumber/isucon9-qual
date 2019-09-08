@@ -5,6 +5,9 @@ require 'mysql2'
 require 'mysql2-cs-bind'
 require 'bcrypt'
 require 'isucari/api'
+require 'logger'
+
+logger = Logger.new('sinatra.log')
 
 module Isucari
   class Web < Sinatra::Base
@@ -387,6 +390,8 @@ module Isucari
           'reserve_id' => sp['reserve_id']
         }
       end
+
+      logger.debug shippings.to_s
 
       item_details = items.map do |item|
         seller = sellers[item['seller_id']]
