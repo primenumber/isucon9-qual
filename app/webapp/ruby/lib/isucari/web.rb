@@ -362,10 +362,15 @@ module Isucari
         end
       end
 
-      seller_ids = items.map do |item|
+      user_ids = items.map do |item|
         item['seller_id']
       end
-      sellers = get_users_simple_by_ids(seller_ids)
+      items.each do |item|
+        if item['buyer_id'] != 0
+          user_ids << item['buyer_id']
+        end
+      end
+      users = get_users_simple_by_ids(user_ids)
 
       tes = {}
       transaction_evidences = db.xquery('SELECT * FROM `transaction_evidences` WHERE `item_id` IN (?)', items.map {|item| item['id'].to_i})
@@ -397,7 +402,7 @@ module Isucari
       $logger.debug sps.to_s
 
       item_details = Parallel.map(items, in_threads: items.count) do |item|
-        seller = sellers[item['seller_id']]
+        seller = users[item['seller_id']]
         if seller.nil?
           db.query('ROLLBACK')
           halt_with_error 404, 'seller not found'
@@ -429,7 +434,7 @@ module Isucari
         }
 
         if item['buyer_id'] != 0
-          buyer = get_user_simple_by_id(item['buyer_id'])
+          buyer = users[item['buyer_id']]
           if buyer.nil?
             db.query('ROLLBACK')
             halt_with_error 404, 'buyer not found'
