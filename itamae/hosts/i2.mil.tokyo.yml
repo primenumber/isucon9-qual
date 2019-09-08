@@ -5,3 +5,4 @@ i2.mil.tokyo:
       user: root
     run_list:
       - cookbooks/hello.rb
+      - cookbooks/nginx/default.rb

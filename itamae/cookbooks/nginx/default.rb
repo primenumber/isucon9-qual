@@ -35,18 +35,13 @@ node.reverse_merge!(
   }
 )
 
-package 'nginx-all-modules'
-
 service 'nginx' do
   action [:enable, :start]
 end
-service 'h20' do
-  action [:disable, :stop]
-end
 
 directory '/var/log/nginx' do
-  owner 'nginx'
-  group 'nginx'
+  owner 'www-data'
+  group 'adm'
   mode  '0755'
 end
 
@@ -57,14 +52,8 @@ template '/etc/nginx/nginx.conf' do
   notifies :run, 'execute[nginx try-reload]'
 end
 
-directory '/etc/nginx/conf.d' do
-  owner 'root'
-  group 'root'
-  mode  '0755'
-end
-
 %w(
-/etc/nginx/conf.d/ruby.conf
+/etc/nginx/sites-enabled/isucari.conf
 ).each do |f|
   template f do
     owner 'root'
