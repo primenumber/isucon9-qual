@@ -400,6 +400,8 @@ module Isucari
         }
       end
 
+      shipment_url = get_shipment_service_url
+
       item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = users[item['seller_id']]
         if seller.nil?
@@ -448,7 +450,7 @@ module Isucari
           end
 
           ssr = begin
-            api_client.shipment_status(get_shipment_service_url, 'reserve_id' => shipping['reserve_id'])
+            api_client.shipment_status(shipment_url, 'reserve_id' => shipping['reserve_id'])
           rescue
             halt_with_error 500, 'failed to request to shipment service'
           end
