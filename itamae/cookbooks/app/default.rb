@@ -25,6 +25,8 @@ rm #{node[:deploy_to]}/webapp
 ln -sf #{node[:deploy_to]}-tmp/app/webapp #{node[:deploy_to]}/webapp
 EOC
   cwd "#{node[:deploy_to]}-tmp"
+
+  notifies :run, 'execute[app restart]'
 end
 
 execute 'bundle i' do
