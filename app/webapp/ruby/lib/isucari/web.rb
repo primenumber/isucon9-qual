@@ -84,7 +84,7 @@ module Isucari
       64 => [60,"ロッキングチェア"],
       65 => [60,"座布団"],
       66 => [60,"空気椅子"]
-    ]
+    }
 
     configure :development do
       require 'sinatra/reloader'
