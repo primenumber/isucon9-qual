@@ -407,13 +407,11 @@ module Isucari
       item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = users[item['seller_id']]
         if seller.nil?
-          db.query('ROLLBACK')
           halt_with_error 404, 'seller not found'
         end
 
         category = get_category_by_id(item['category_id'])
         if category.nil?
-          db.query('ROLLBACK')
           halt_with_error 404, 'category not found'
         end
 
@@ -439,7 +437,6 @@ module Isucari
         if item['buyer_id'] != 0
           buyer = users[item['buyer_id']]
           if buyer.nil?
-            db.query('ROLLBACK')
             halt_with_error 404, 'buyer not found'
           end
 
@@ -451,7 +448,6 @@ module Isucari
         unless transaction_evidence.nil?
           shipping = sps[transaction_evidence['id']] # db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` = ?', transaction_evidence['id']).first
           if shipping.nil?
-            db.query('ROLLBACK')
             halt_with_error 404, 'shipping not found'
           end
 
@@ -460,7 +456,6 @@ module Isucari
           ssr = begin
             api_client.shipment_status(get_shipment_service_url, 'reserve_id' => shipping['reserve_id'])
           rescue
-            db.query('ROLLBACK')
             halt_with_error 500, 'failed to request to shipment service'
           end
 
