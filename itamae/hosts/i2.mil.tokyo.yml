@@ -6,3 +6,4 @@ i2.mil.tokyo:
     run_list:
       - cookbooks/hello.rb
       - cookbooks/nginx/default.rb
+      - cookbooks/app/default.rb
