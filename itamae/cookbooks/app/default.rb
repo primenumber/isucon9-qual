@@ -20,7 +20,7 @@ execute 'deploy app' do
   user node[:user]
   command <<"EOC"
 GIT_SSH=#{git_ssh} git pull
-cp -rf /home/isucon/isucari-tmp/app/webapp/publi/* /srv/static
+cp -rf /home/isucon/isucari-tmp/app/webapp/public/* /srv/static
 rm #{node[:deploy_to]}/webapp
 ln -sf #{node[:deploy_to]}-tmp/app/webapp #{node[:deploy_to]}/webapp
 EOC
