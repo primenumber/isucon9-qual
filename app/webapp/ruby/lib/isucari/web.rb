@@ -400,9 +400,7 @@ module Isucari
         }
       end
 
-      $logger.debug items.map{|item| item['id']}.to_s
-      $logger.debug tes.to_s
-      $logger.debug sps.to_s
+      $logger.debug items.count
 
       item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = users[item['seller_id']]
@@ -450,8 +448,6 @@ module Isucari
           if shipping.nil?
             halt_with_error 404, 'shipping not found'
           end
-
-          $logger.debug shipping.to_s
 
           ssr = begin
             api_client.shipment_status(get_shipment_service_url, 'reserve_id' => shipping['reserve_id'])
