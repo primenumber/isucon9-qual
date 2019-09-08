@@ -6,6 +6,7 @@ gem 'mysql2'
 gem 'mysql2-cs-bind'
 gem 'bcrypt'
 gem 'parallel'
+gem 'unicorn'
 
 group :development do
   gem 'sinatra-contrib'
