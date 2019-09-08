@@ -650,7 +650,7 @@ module Isucari
       item_id = body_params['item_id'].to_i
       token = body_params['token']
 
-      halt_with_error 422, 'csrf token error' if csrf_token != session['csrf_token']
+      # halt_with_error 422, 'csrf token error' if csrf_token != session['csrf_token']
 
       buyer = get_user
       halt_with_error 404, 'buyer not found' if buyer.nil?
