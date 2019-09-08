@@ -391,7 +391,7 @@ module Isucari
         }
       end
 
-      $logger.debug shippings.to_s
+      $logger.debug sps.to_s
 
       item_details = items.map do |item|
         seller = sellers[item['seller_id']]
