@@ -367,7 +367,10 @@ module Isucari
       transaction_evidences = db.xquery('SELECT * FROM `transaction_evidences` WHERE `item_id` IN (?)', items.map {|item| item['id'].to_i})
       tids = []
       transaction_evidences.each do |te|
-        tes[te['item_id']] = te
+        tes[te['item_id']] = {
+          'id' => te['id'],
+          'status' => te['status']
+        }
         unless te['id'].nil?
           tids << te['id']
         end
@@ -376,7 +379,9 @@ module Isucari
       sps = {}
       shippings = db.xquery('SELECT * FROM `shippings` WHERE `transaction_evidence_id` IN (?)', tids.map(&:to_i))
       shippings.each do |sp|
-        sps[sp['transaction_evidence_id']] = sp
+        sps[sp['transaction_evidence_id']] = {
+          'reserve_id' => sp['reserve_id']
+        }
       end
 
       item_details = items.map do |item|
