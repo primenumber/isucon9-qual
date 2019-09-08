@@ -391,6 +391,9 @@ module Isucari
       else
         []
       end
+
+      db.query('COMMIT')
+
       shippings.each do |sp|
         sps[sp['transaction_evidence_id']] = {
           'reserve_id' => sp['reserve_id']
@@ -468,8 +471,6 @@ module Isucari
 
         item_detail
       end
-
-      db.query('COMMIT')
 
       has_next = false
       if item_details.length > TRANSACTIONS_PER_PAGE
