@@ -150,7 +150,7 @@ module Isucari
         end
 
         {
-          'id' => category['id'],
+          'id' => category_id,
           'parent_id' => category['parent_id'],
           'category_name' => category['category_name'],
           'parent_category_name' => parent_category_name
