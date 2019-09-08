@@ -13,14 +13,15 @@ file git_ssh do
 end
 
 directory '/srv/static' do
-  owner 'nginx'
+  owner 'www-data'
 end
 
 execute 'deploy app' do
   user node[:user]
   command <<"EOC"
 GIT_SSH=#{git_ssh} git pull
-cp -rf /home/isucon/torb-tmp/app/webapp/static/* /srv/staticrm #{node[:deploy_to]}/webapp
+cp -rf /home/isucon/isucari-tmp/app/webapp/publi/* /srv/static
+rm #{node[:deploy_to]}/webapp
 ln -sf #{node[:deploy_to]}-tmp/app/webapp #{node[:deploy_to]}/webapp
 EOC
   cwd "#{node[:deploy_to]}-tmp"
@@ -35,12 +36,12 @@ EOC
 end
 
 execute 'copy static' do
-  command 'cp -rf /home/isucon/torb-tmp/app/webapp/static/* /srv/static'
+  command 'cp -rf /home/isucon/isucari-tmp/app/webapp/public/* /srv/static'
   not_if 'test -e /srv/static/favicon.ico'
 end
 
 execute 'chown static' do
-  command 'chown nginx:nginx -R /srv/static'
+  command 'chown www-data:www-data -R /srv/static'
 end
 
 execute 'app restart' do
@@ -51,8 +52,4 @@ end
 execute 'daemon-reload' do
   command 'systemctl daemon-reload'
   action :nothing
-end
-
-remote_file '/etc/systemd/system/torb.ruby.service' do
-  notifies :run, 'execute[daemon-reload]'
 end
