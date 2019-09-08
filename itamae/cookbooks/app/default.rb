@@ -19,7 +19,7 @@ GIT_SSH=#{git_ssh} git pull
 rm #{node[:deploy_to]}/webapp
 ln -sf #{node[:deploy_to]}-tmp/app/webapp #{node[:deploy_to]}/webapp
 ln -sf /home/isucon/isucari-orig/webapp/sql/initial.sql /home/isucon/isucari-tmp/app/webapp/sql/
-ln -sf /home/isucon/isucari-orig/webapp/public/upload/   /home/isucon/isucari-tmp/app/webapp/public/
+ln -sf /home/isucon/isucari-orig/webapp/public/upload/ /home/isucon/isucari-tmp/app/webapp/public/
 EOC
   cwd "#{node[:deploy_to]}-tmp"
 
