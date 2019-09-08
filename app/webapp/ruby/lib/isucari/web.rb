@@ -401,8 +401,7 @@ module Isucari
       $logger.debug tes.to_s
       $logger.debug sps.to_s
 
-      # item_details = Parallel.map(items, in_threads: items.count) do |item|
-      item_details = items.map do |item|
+      item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = users[item['seller_id']]
         if seller.nil?
           db.query('ROLLBACK')
