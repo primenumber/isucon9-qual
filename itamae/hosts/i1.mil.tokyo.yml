@@ -8,3 +8,4 @@ i1.mil.tokyo:
       - cookbooks/nginx/default.rb
       - cookbooks/app/default.rb
       - cookbooks/netdata/default.rb
+      - hosts/i1/default.rb
