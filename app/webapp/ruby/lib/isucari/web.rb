@@ -391,6 +391,7 @@ module Isucari
         }
       end
 
+      $logger.debug items.map{|item| item['id']}.to_s
       $logger.debug tes.to_s
       $logger.debug sps.to_s
 
