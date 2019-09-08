@@ -7,3 +7,4 @@ i2.mil.tokyo:
       - cookbooks/hello.rb
       - cookbooks/nginx/default.rb
       - cookbooks/app/default.rb
+      - cookbooks/netdata/default.rb
