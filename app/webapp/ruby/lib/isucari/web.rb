@@ -7,7 +7,7 @@ require 'bcrypt'
 require 'isucari/api'
 require 'logger'
 
-logger = Logger.new('sinatra.log')
+$logger = Logger.new('sinatra.log')
 
 module Isucari
   class Web < Sinatra::Base
@@ -391,7 +391,7 @@ module Isucari
         }
       end
 
-      logger.debug shippings.to_s
+      $logger.debug shippings.to_s
 
       item_details = items.map do |item|
         seller = sellers[item['seller_id']]
