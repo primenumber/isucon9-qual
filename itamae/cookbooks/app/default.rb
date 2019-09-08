@@ -12,17 +12,14 @@ file git_ssh do
   content %Q(#!/bin/sh\nexec ssh -oIdentityFile=#{deploy_key} -oStrictHostKeyChecking=no "$@")
 end
 
-directory '/srv/static' do
-  owner 'www-data'
-end
-
 execute 'deploy app' do
   user node[:user]
   command <<"EOC"
 GIT_SSH=#{git_ssh} git pull
-cp -rf /home/isucon/isucari-tmp/app/webapp/public/* /srv/static
 rm #{node[:deploy_to]}/webapp
 ln -sf #{node[:deploy_to]}-tmp/app/webapp #{node[:deploy_to]}/webapp
+ln -sf /home/isucon/isucari-orig/webapp/sql/initial.sql /home/isucon/isucari-tmp/app/webapp/sql/
+ln -sf /home/isucon/isucari-orig/webapp/public/upload/   /home/isucon/isucari-tmp/app/webapp/public/
 EOC
   cwd "#{node[:deploy_to]}-tmp"
 
@@ -35,11 +32,6 @@ execute 'bundle i' do
 ~/local/ruby/bin/bundle install --path=vendor/bundle
 EOC
   cwd "#{node[:deploy_to]}/webapp/ruby"
-end
-
-execute 'copy static' do
-  command 'cp -rf /home/isucon/isucari-tmp/app/webapp/public/* /srv/static'
-  not_if 'test -e /srv/static/favicon.ico'
 end
 
 execute 'chown static' do

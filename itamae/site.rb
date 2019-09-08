@@ -3,7 +3,7 @@ node[:user] = 'isucon'
 node[:home] = "/home/#{node[:user]}"
 node[:deploy_to] = "#{node[:home]}/isucari"
 node[:static_dir] = "#{node[:deploy_to]}/public"
-node[:app_restart] = 'echo hello'
+node[:app_restart] = 'systemctl  restart isucari.ruby.service'
 
 MItamae::RecipeContext.class_eval do
   ROLES_DIR = File.expand_path("../roles", __FILE__)
