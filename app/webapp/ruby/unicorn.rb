@@ -5,7 +5,7 @@ timeout 3600
 
 
 listen 8000
-pid "/var/run/unicorn.pid"
+pid "/tmp/unicorn.pid"
 
 
 stderr_path "/tmp/unicorn.log"
