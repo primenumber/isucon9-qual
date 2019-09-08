@@ -5,6 +5,7 @@ require 'mysql2'
 require 'mysql2-cs-bind'
 require 'bcrypt'
 require 'isucari/api'
+require 'parallel'
 #require 'logger'
 
 #$logger = Logger.new('sinatra.log')
@@ -395,7 +396,7 @@ module Isucari
       # $logger.debug tes.to_s
       # $logger.debug sps.to_s
 
-      item_details = items.map do |item|
+      item_details = Parallel.map(items, in_threads: items.count) do |item|
         seller = sellers[item['seller_id']]
         if seller.nil?
           db.query('ROLLBACK')
